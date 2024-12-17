@@ -1,0 +1,16 @@
+[package]
+name = "et-core-local"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.42.0", features = ["full"] }
+sqlx =  { version = "0.8.2", features = [ "runtime-tokio", "tls-rustls", "sqlite", "migrate",
+"macros" ] }
+
+[dev-dependencies]
+cucumber = { version = "0.21.1" }
+
+[[test]]
+name = "main"
+harness = false
