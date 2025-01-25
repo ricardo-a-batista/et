@@ -3,18 +3,15 @@ name        = "expenses_tracker"
 version     = "0.1.0"
 edition     = "2021"
 license     = "MIT"
-description = "expenses tracker: local first tui expenses tracker with p2p capabilities"
+description = "expenses tracker: self hosted budget and expenses tracker"
 
 authors     = ["Ricardo Batista <ricardo.batista@hey.com>"]
-categories  = ["expenses tracker", "local first", "p2p", "iroh"]
+categories  = ["expenses tracker"]
 
 [dependencies]
+axum        = { version = "0.8.1" }
 tokio       = { version = "1.43.0", features = ["full"] }
-sqlx        = { version = "0.8.3", features = [ "runtime-tokio", "tls-rustls-ring-native-roots", "postgres", "macros", "migrate" ] }
-iroh        = { version = "0.31.0" }
-iroh-gossip = { version = "0.31.0" }
-rand        = { version = "0.8.5" }
-ratatui     = { version = "0.28.0" }
+sqlx        = { version = "0.8.3", features = [ "runtime-tokio", "tls-rustls-ring-native-roots", "postgres", "macros", "migrate", "sqlite" ] }
 derive_more = { version = "1.0.0", features = [ "from" ] }
 
 [dev-dependencies]
