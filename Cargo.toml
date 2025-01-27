@@ -12,7 +12,7 @@ categories  = ["expenses tracker"]
 axum        = { version = "0.8.1" }
 tokio       = { version = "1.43.0", features = ["full"] }
 sqlx        = { version = "0.8.3", features = [ "runtime-tokio", "tls-rustls-ring-native-roots", "postgres", "macros", "migrate", "sqlite" ] }
-derive_more = { version = "1.0.0", features = [ "from" ] }
+derive_more = { version = "1.0.0", features = [ "from", "display" ] }
 
 opentelemetry        = { version = "0.27.1" }
 opentelemetry_sdk    = { version = "0.27.1" }
@@ -26,4 +26,4 @@ cucumber = { version = "0.21.1" }
 
 [[test]]
 name    = "main"
-harness = true
+harness = false
