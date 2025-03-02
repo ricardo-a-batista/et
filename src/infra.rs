@@ -1,4 +1,4 @@
-use sqlx::{migrate::Migrator, Database, Pool};
+use sqlx::{migrate::Migrator, Database, Pool, Sqlite};
 
 use crate::Result;
 
@@ -10,4 +10,9 @@ where
 {
     MIGRATE.run(pool).await?;
     Ok(())
+}
+
+#[derive(Debug, Clone)]
+pub struct AppState {
+    pub pool: Pool<Sqlite>,
 }
