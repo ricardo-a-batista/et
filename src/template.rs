@@ -66,8 +66,13 @@ impl Template {
         };
 
         let mut response_builder = Response::builder().status(status_code);
-        for (key, value) in self.headers {
-            response_builder = response_builder.header(key, value);
+
+        if self.headers.is_empty() {
+            response_builder = response_builder.header("content-type", "text/html; charset=UTF-8");
+        } else {
+            for (key, value) in self.headers {
+                response_builder = response_builder.header(key, value);
+            }
         }
 
         Ok(response_builder.body(body)?)
