@@ -13,4 +13,13 @@ pub enum Error {
 
     #[from]
     Io(std::io::Error),
+
+    #[from]
+    Http(axum::http::Error),
+
+    #[from]
+    Template(tera::Error),
+
+    #[from]
+    InvalidHeaderValue(axum::http::header::InvalidHeaderValue),
 }
