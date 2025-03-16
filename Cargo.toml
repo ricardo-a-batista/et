@@ -14,7 +14,7 @@ tera        = { version = "1.20.0" }
 tokio       = { version = "1.43.0", features = [ "full", "tracing" ] }
 tower       = { version = "0.5.2" }
 tower-http  = { version = "0.6.2", features = [ "trace", "compression-full", "decompression-full",
-"timeout" ] }
+"timeout", "fs" ] }
 sqlx        = { version = "0.8.3", features = [ "runtime-tokio", "tls-rustls-ring-native-roots", "macros", "migrate", "sqlite" ] }
 derive_more = { version = "2.0.1", features = [ "from", "display" ] }
 lazy_static = { version = "1.5.0" }

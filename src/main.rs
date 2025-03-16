@@ -10,8 +10,8 @@ use expenses_tracker::{
 use sqlx::sqlite::SqlitePoolOptions;
 use tower::ServiceBuilder;
 use tower_http::{
-    compression::CompressionLayer, decompression::RequestDecompressionLayer, timeout::TimeoutLayer,
-    trace::TraceLayer,
+    compression::CompressionLayer, decompression::RequestDecompressionLayer, services::ServeDir,
+    timeout::TimeoutLayer, trace::TraceLayer,
 };
 
 #[tokio::main]
@@ -26,6 +26,7 @@ async fn main() -> Result<()> {
 
     let app = Router::new()
         .route("/", get(home::index))
+        .nest_service("/static", ServeDir::new("static"))
         .layer(
             ServiceBuilder::new()
                 .layer(RequestDecompressionLayer::new())
