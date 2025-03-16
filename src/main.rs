@@ -6,7 +6,10 @@ use expenses_tracker::{
     Result,
 };
 use sqlx::sqlite::SqlitePoolOptions;
-use tower_http::trace::TraceLayer;
+use tower::ServiceBuilder;
+use tower_http::{
+    compression::CompressionLayer, decompression::RequestDecompressionLayer, trace::TraceLayer,
+};
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -20,6 +23,11 @@ async fn main() -> Result<()> {
 
     let app = Router::new()
         .route("/", get(home::index))
+        .layer(
+            ServiceBuilder::new()
+                .layer(RequestDecompressionLayer::new())
+                .layer(CompressionLayer::new()),
+        )
         .layer(TraceLayer::new_for_http())
         .with_state(AppState { pool });
 
