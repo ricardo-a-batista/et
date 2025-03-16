@@ -1,4 +1,5 @@
 use sqlx::{migrate::Migrator, Database, Pool, Sqlite};
+use tokio::signal;
 
 use crate::Result;
 
@@ -15,4 +16,24 @@ where
 #[derive(Debug, Clone)]
 pub struct AppState {
     pub pool: Pool<Sqlite>,
+}
+
+pub async fn shutdown_signal() {
+    let ctrl_c = async {
+        signal::ctrl_c()
+            .await
+            .expect("failed to install Ctrl+C handler");
+    };
+
+    let terminate = async {
+        signal::unix::signal(signal::unix::SignalKind::terminate())
+            .expect("failed to install signal handler")
+            .recv()
+            .await;
+    };
+
+    tokio::select! {
+        () = ctrl_c => {},
+        () = terminate => {},
+    }
 }

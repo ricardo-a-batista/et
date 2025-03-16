@@ -1,14 +1,17 @@
 #![deny(clippy::all, clippy::pedantic)]
+use std::time::Duration;
+
 use axum::{routing::get, Router};
 use expenses_tracker::{
     controller::home,
-    infra::{migrate, AppState},
+    infra::{migrate, shutdown_signal, AppState},
     Result,
 };
 use sqlx::sqlite::SqlitePoolOptions;
 use tower::ServiceBuilder;
 use tower_http::{
-    compression::CompressionLayer, decompression::RequestDecompressionLayer, trace::TraceLayer,
+    compression::CompressionLayer, decompression::RequestDecompressionLayer, timeout::TimeoutLayer,
+    trace::TraceLayer,
 };
 
 #[tokio::main]
@@ -28,13 +31,18 @@ async fn main() -> Result<()> {
                 .layer(RequestDecompressionLayer::new())
                 .layer(CompressionLayer::new()),
         )
-        .layer(TraceLayer::new_for_http())
+        .layer((
+            TraceLayer::new_for_http(),
+            TimeoutLayer::new(Duration::from_secs(10)),
+        ))
         .with_state(AppState { pool });
 
     let bind = "0.0.0.0:3000";
     let listener = tokio::net::TcpListener::bind(bind).await?;
     tracing::info!("Server starting: [{}]", listener.local_addr()?);
-    axum::serve(listener, app).await?;
+    axum::serve(listener, app)
+        .with_graceful_shutdown(shutdown_signal())
+        .await?;
 
     Ok(())
 }
